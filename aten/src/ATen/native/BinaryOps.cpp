@@ -51,6 +51,14 @@ Tensor add(const Tensor& self, const Tensor& other, Scalar alpha) {
   return iter.output();
 }
 
+Tensor add(const Tensor& self, const Tensor& other, ScalarType dtype) {
+  Tensor result = at::empty({0}, self.options().dtype(dtype));
+  Scalar alpha = 1;
+  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  add_stub(iter.device_type(), iter, alpha);
+  return iter.output();
+}
+
 Tensor& add_(Tensor& self, const Tensor& other, Scalar alpha) {
   return native::add_out(self, self, other, alpha);
 }
