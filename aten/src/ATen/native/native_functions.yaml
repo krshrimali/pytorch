@@ -1273,6 +1273,10 @@
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
+ 
+- func: floor.dtype(Tensor self, ScalarType dtype) -> Tensor
+  supports_named_tensor: True
+  variants: function, method
 
 - func: floor_(Tensor(a!) self) -> Tensor(a!)
   supports_named_tensor: True
@@ -1292,6 +1296,10 @@
 
 - func: frac(Tensor self) -> Tensor
   use_c10_dispatcher: full
+  supports_named_tensor: True
+  variants: function, method
+
+- func: frac.dtype(Tensor self, ScalarType dtype) -> Tensor 
   supports_named_tensor: True
   variants: function, method
 
@@ -1587,6 +1595,10 @@
 
 - func: log(Tensor self) -> Tensor
   use_c10_dispatcher: full
+  supports_named_tensor: True
+  variants: function, method
+
+- func: log.dtype(Tensor self, ScalarType dtype) -> Tensor 
   supports_named_tensor: True
   variants: function, method
 
