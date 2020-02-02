@@ -29,17 +29,6 @@
 namespace at {
 namespace native {
 
-/*
-static TensorIterator make_reduction(
-        const char* name, Tensor& result, const Tensor& self,
-        ScalarType in_dtype, ScalarType out_dtype) {
-  TORCH_CHECK(
-          !result.defined() || result.scalar_type() == out.dtype,
-          name, ": provided dtype must match dtype of result.");
-  return TensorIterator::
-
-}
-*/
 // NOTE: These are helper functions that reduce redundant code in implementing the most typical kind of unary operators.
 // YOU ARE NOT OBLIGED TO USE THESE HELPERS---if you're writing something more specialized, please don't try to make
 // them work for your case, but just write something new instead. Here we use helper functions instead of a flat fat
@@ -65,8 +54,9 @@ static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  return out_impl(result, self.to(dtype));
+  return out_impl(result, self.to(dtype)); // expm1 works fine, do other functions work with these helper functions?
 }
+
 template <typename OutImpl>
 static inline Tensor& unary_op_impl_(Tensor& self, OutImpl& out_impl) {
   return out_impl(self, self);
