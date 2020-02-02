@@ -29,6 +29,17 @@
 namespace at {
 namespace native {
 
+/*
+static TensorIterator make_reduction(
+        const char* name, Tensor& result, const Tensor& self,
+        ScalarType in_dtype, ScalarType out_dtype) {
+  TORCH_CHECK(
+          !result.defined() || result.scalar_type() == out.dtype,
+          name, ": provided dtype must match dtype of result.");
+  return TensorIterator::
+
+}
+*/
 // NOTE: These are helper functions that reduce redundant code in implementing the most typical kind of unary operators.
 // YOU ARE NOT OBLIGED TO USE THESE HELPERS---if you're writing something more specialized, please don't try to make
 // them work for your case, but just write something new instead. Here we use helper functions instead of a flat fat
@@ -51,6 +62,11 @@ static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
   return out_impl(result, self);
 }
 
+template <typename OutImpl>
+static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
+  Tensor result = at::empty({0}, self.options().dtype(dtype));
+  return out_impl(result, self.to(dtype));
+}
 template <typename OutImpl>
 static inline Tensor& unary_op_impl_(Tensor& self, OutImpl& out_impl) {
   return out_impl(self, self);
@@ -90,6 +106,7 @@ Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
 Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub); }
 Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
+Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::expm1_out, dtype); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
 Tensor& frac_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, frac_stub); }
