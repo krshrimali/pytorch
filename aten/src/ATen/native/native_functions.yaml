@@ -1007,6 +1007,15 @@
     SparseCUDA: div_sparse
   supports_named_tensor: True
 
+- func: div.Tensor_dtype(Tensor self, Tensor other, ScalarType dtype) -> Tensor
+  variants: function, method
+  dispatch:
+    CPU: div
+    CUDA: div
+    SparseCPU: div_sparse
+    SparseCUDA: div_sparse
+  supports_named_tensor: True
+
 - func: div_.Tensor(Tensor(a!) self, Tensor other) -> Tensor(a!)
   variants: method
   dispatch:
@@ -1963,6 +1972,16 @@
 
 - func: mul.Tensor(Tensor self, Tensor other) -> Tensor
   use_c10_dispatcher: full
+  variants: function, method
+  dispatch:
+    CPU: mul
+    CUDA: mul
+    SparseCPU: mul_sparse
+    SparseCUDA: mul_sparse
+    MkldnnCPU: mkldnn_mul
+  supports_named_tensor: True
+
+- func: mul.Tensor_dtype(Tensor self, Tensor other, ScalarType dtype) -> Tensor
   variants: function, method
   dispatch:
     CPU: mul
@@ -3157,6 +3176,15 @@
 
 - func: sub.Tensor(Tensor self, Tensor other, *, Scalar alpha=1) -> Tensor
   use_c10_dispatcher: full
+  variants: function, method
+  dispatch:
+    CPU: sub
+    CUDA: sub
+    SparseCPU: sub_sparse
+    SparseCUDA: sub_sparse
+  supports_named_tensor: True
+
+- func: sub.Tensor_dtype(Tensor self, Tensor other, *, ScalarType dtype) -> Tensor
   variants: function, method
   dispatch:
     CPU: sub
