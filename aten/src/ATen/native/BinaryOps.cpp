@@ -34,6 +34,15 @@ DEFINE_DISPATCH(tanh_backward_stub);
 DEFINE_DISPATCH(max_elementwise_stub);
 DEFINE_DISPATCH(min_elementwise_stub);
 
+// TODO: (Delete this later) - Note to self
+// Functions having dtype argument
+// add, div, mul, sub
+// 
+// Tests:
+// 1.add --- OK 
+// 2.
+// 3.
+
 Tensor& add_out(Tensor& result, const Tensor& self, const Tensor& other, Scalar alpha) {
   auto iter = TensorIterator::binary_op(result, self, other,
     /*check_mem_overlap=*/true);
@@ -51,6 +60,8 @@ Tensor add(const Tensor& self, const Tensor& other, Scalar alpha) {
   return iter.output();
 }
 
+// TODO: Why can't we just add an optional dtype to add function?
+// And not use an overload
 Tensor add(const Tensor& self, const Tensor& other, ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
   Scalar alpha = 1;
@@ -73,6 +84,14 @@ Tensor& div_out(Tensor& result, const Tensor& self, const Tensor& other) {
 Tensor div(const Tensor& self, const Tensor& other) {
   Tensor result;
   auto iter = TensorIterator::binary_op(result, self, other);
+  div_stub(iter.device_type(), iter);
+  return iter.output();
+}
+
+// TODO: Which dtypes are not supported?
+Tensor div(const Tensor& self, const Tensor& other, ScalarType dtype) {
+  Tensor result = at::empty({0}, self.options().dtype(dtype)); // TODO: Is there another way to do this?
+  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
   div_stub(iter.device_type(), iter);
   return iter.output();
 }
@@ -112,6 +131,13 @@ Tensor mul(const Tensor& self, const Tensor& other) {
   return iter.output();
 }
 
+Tensor mul(const Tensor& self, const Tensor& other, ScalarType dtype) {
+  Tensor result = at::empty({0}, self.options().dtype(dtype));
+  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  mul_stub(iter.device_type(), iter);
+  return iter.output();
+}
+
 Tensor& mul_(Tensor& self, const Tensor& other) {
   return native::mul_out(self, self, other);
 }
@@ -131,6 +157,16 @@ Tensor sub(const Tensor& self, const Tensor& other, Scalar alpha) {
   Tensor result;
   auto iter = TensorIterator::binary_op(result, self, other);
   alpha_check(iter.dtype(), alpha);
+  sub_stub(iter.device_type(), iter, alpha);
+  return iter.output();
+}
+
+// TODO: Which dtypes don't work?
+Tensor sub(const Tensor& self, const Tensor& other, ScalarType dtype) {
+  sub_check(self, other);
+  Tensor result = at::empty({0}, self.options().dtype(dtype));
+  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  Scalar alpha = 1; // TODO: Take this as an optional argument
   sub_stub(iter.device_type(), iter, alpha);
   return iter.output();
 }
