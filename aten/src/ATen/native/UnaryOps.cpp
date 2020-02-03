@@ -54,7 +54,7 @@ static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  return out_impl(result, self); // expm1 works fine, do other functions work with these helper functions?
+  return out_impl(result, self);
 }
 
 template <typename OutImpl>

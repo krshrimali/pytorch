@@ -182,15 +182,6 @@ void TensorIterator::compute_types() {
   bool may_have_differing_types = true;
   bool common_device_is_cuda = false;
 
-  for (auto &op: operands_) {
-    if(op.is_output && op.tensor.defined()) {
-      std::cout << "op is output" << std::endl;
-    }
-  }
-
-  std::cout << "checking for may_have_different_types" << std::endl;
-  std::cout << missing_dtypes << ", " << compute_common_dtype << std::endl;
-
   if (missing_dtypes || compute_common_dtype) {
     auto operands = compute_common_dtype_only_for_inputs ? at::ArrayRef<OperandInfo>(operands_).slice(noutputs()) : operands_;
     auto common_type = compute_common_type_(operands);
@@ -702,7 +693,7 @@ TensorIterator TensorIterator::unary_op(Tensor& out, const Tensor& a,
   iter.add_output(out);
   iter.add_input(a);
   iter.num_outputs_ = 1;
-  iter.promote_common_dtype(); // Note: func binary_op() has it already, why not unary_op?
+  iter.promote_common_dtype();
   iter.build();
   return iter;
 }
