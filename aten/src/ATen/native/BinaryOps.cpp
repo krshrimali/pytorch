@@ -60,6 +60,7 @@ Tensor add(const Tensor& self, const Tensor& other, Scalar alpha) {
   return iter.output();
 }
 
+// TODO: Why does Scalar alpha=1 not work?
 // TODO: Why can't we just add an optional dtype to add function?
 // And not use an overload
 Tensor add(const Tensor& self, const Tensor& other, Scalar alpha, ScalarType dtype) {
