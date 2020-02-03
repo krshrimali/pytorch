@@ -281,7 +281,7 @@
     MkldnnCPU: mkldnn_add
   supports_named_tensor: True
 
-- func: add.Tensor_dtype(Tensor self, Tensor other, *, ScalarType dtype) -> Tensor
+- func: add.Tensor_dtype(Tensor self, Tensor other, *, Scalar alpha=1, ScalarType dtype) -> Tensor
   variants: function, method
   dispatch:
       CPU: add
@@ -3179,7 +3179,7 @@
     SparseCUDA: sub_sparse
   supports_named_tensor: True
 
-- func: sub.Tensor_dtype(Tensor self, Tensor other, *, ScalarType dtype) -> Tensor
+- func: sub.Tensor_dtype(Tensor self, Tensor other, *, Scalar alpha=1, ScalarType dtype) -> Tensor
   variants: function, method
   dispatch:
     CPU: sub
