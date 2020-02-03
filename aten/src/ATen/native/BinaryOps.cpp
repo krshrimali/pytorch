@@ -161,7 +161,7 @@ Tensor sub(const Tensor& self, const Tensor& other, Scalar alpha) {
 }
 
 // TODO: Which dtypes don't work?
-Tensor sub(const Tensor& self, const Tensor& other, Scalar alpha=1, ScalarType dtype) {
+Tensor sub(const Tensor& self, const Tensor& other, Scalar alpha, ScalarType dtype) {
   sub_check(self, other);
   Tensor result = at::empty({0}, self.options().dtype(dtype));
   auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
