@@ -36,8 +36,10 @@ namespace native {
 // operators (more is foreseeable) and is more flexible and elegant than the latter.
 template <typename Stub>
 static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub& stub) {
+  std::cout << "Making TensorIterator" << std::endl;
   auto iter = TensorIterator::unary_op(result, self,
     /*check_mem_overlap=*/true);
+  std::cout << "Made TensorIterator" << std::endl;
   stub(iter.device_type(), iter);
   return result;
 }
@@ -54,7 +56,7 @@ static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  return out_impl(result, self.to(dtype)); // expm1 works fine, do other functions work with these helper functions?
+  return out_impl(result, self); // expm1 works fine, do other functions work with these helper functions?
 }
 
 template <typename OutImpl>
