@@ -202,6 +202,7 @@ void ceil_kernel_cuda(TensorIterator& iter) {
 }
 
 void expm1_kernel_cuda(TensorIterator& iter) {
+  std::cout << "Entered expm1_kernel_cuda" << iter.dtype() << std::endl;
   AT_DISPATCH_FLOATING_TYPES_AND_HALF(iter.dtype(), "expm1_cuda", [&]() {
     gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
       return ::expm1(a);
