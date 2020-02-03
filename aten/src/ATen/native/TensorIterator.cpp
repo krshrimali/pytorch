@@ -140,6 +140,9 @@ static void validate_dtype(OperandInfo& op, ScalarType common_dtype, CommonDType
           " can't be cast to the desired output type ",
           op.current_dtype);
     }
+    if(op.target_dtype != op.current_dtype){
+        promoting = true;
+    }
     TORCH_CHECK(promoting || op.target_dtype == op.current_dtype, "expected dtype ", op.target_dtype, " but got dtype ", op.current_dtype);
   }
 }
@@ -686,7 +689,8 @@ TensorIterator TensorIterator::unary_op(Tensor& out, const Tensor& a,
   iter.add_output(out);
   iter.add_input(a);
   iter.num_outputs_ = 1;
-  iter.build();
+  std::cout << "Building tensor: " << std::endl;
+  iter.build(); // This causes error
   return iter;
 }
 
@@ -958,6 +962,7 @@ void TensorIterator::build() {
   compute_names();
   // compute the broadcasted shape
   compute_shape();
+  std::cout << "Computing types: " << std::endl;
   // compute the result dtype and device
   compute_types();
   if (can_use_fast_set_up()) {
