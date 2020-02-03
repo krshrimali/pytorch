@@ -62,7 +62,7 @@ Tensor add(const Tensor& self, const Tensor& other, Scalar alpha) {
 
 // TODO: Why can't we just add an optional dtype to add function?
 // And not use an overload
-Tensor add(const Tensor& self, const Tensor& other, Scalar alpha=1, ScalarType dtype) {
+Tensor add(const Tensor& self, const Tensor& other, Scalar alpha, ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
   auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
   add_stub(iter.device_type(), iter, alpha);
