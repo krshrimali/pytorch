@@ -140,6 +140,8 @@ static void validate_dtype(OperandInfo& op, ScalarType common_dtype, CommonDType
           " can't be cast to the desired output type ",
           op.current_dtype);
     }
+    // temporary soln, still testing
+    if(op.target_dtype != op.current_dtype) promoting = true;
     TORCH_CHECK(promoting || op.target_dtype == op.current_dtype, "expected dtype ", op.target_dtype, " but got dtype ", op.current_dtype);
   }
 }
