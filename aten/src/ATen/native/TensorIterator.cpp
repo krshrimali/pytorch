@@ -140,8 +140,6 @@ static void validate_dtype(OperandInfo& op, ScalarType common_dtype, CommonDType
           " can't be cast to the desired output type ",
           op.current_dtype);
     }
-    // temporary soln, still testing
-    if(op.target_dtype != op.current_dtype) promoting = true;
     TORCH_CHECK(promoting || op.target_dtype == op.current_dtype, "expected dtype ", op.target_dtype, " but got dtype ", op.current_dtype);
   }
 }
@@ -183,6 +181,15 @@ void TensorIterator::compute_types() {
 
   bool may_have_differing_types = true;
   bool common_device_is_cuda = false;
+
+  for (auto &op: operands_) {
+    if(op.is_output && op.tensor.defined()) {
+      std::cout << "op is output" << std::endl;
+    }
+  }
+
+  std::cout << "checking for may_have_different_types" << std::endl;
+  std::cout << missing_dtypes << ", " << compute_common_dtype << std::endl;
 
   if (missing_dtypes || compute_common_dtype) {
     auto operands = compute_common_dtype_only_for_inputs ? at::ArrayRef<OperandInfo>(operands_).slice(noutputs()) : operands_;
@@ -230,6 +237,13 @@ void TensorIterator::compute_types() {
     bool is_different = op.tensor.defined() && op.current_dtype != common_dtype_;
 
     if (may_have_differing_types) {
+
+      // common_dtype_strategy_ is set to CHECK by default, and does not change after that
+      // 3 functions which help change this: 
+      // promote_common_dtype() to PROMOTE
+      // dont_compute_common_dtype() to NONE
+      // compute_common_dtype_only_for_inputs() to PROMOTE_INPUTS
+
       validate_dtype(op, common_dtype_, common_dtype_strategy_);
       bool cast_by_copy = compute_common_dtype && !common_device_is_cuda && !skip_output;
       if (cast_by_copy) {
@@ -688,6 +702,7 @@ TensorIterator TensorIterator::unary_op(Tensor& out, const Tensor& a,
   iter.add_output(out);
   iter.add_input(a);
   iter.num_outputs_ = 1;
+  iter.promote_common_dtype(); // Note: func binary_op() has it already, why not unary_op?
   iter.build();
   return iter;
 }
