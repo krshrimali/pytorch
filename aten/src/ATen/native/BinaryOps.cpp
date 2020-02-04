@@ -91,7 +91,7 @@ Tensor div(const Tensor& self, const Tensor& other) {
 // TODO: Which dtypes are not supported?
 Tensor div(const Tensor& self, const Tensor& other, ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype)); // TODO: Is there another way to do this?
-  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  auto iter = TensorIterator::binary_op(result, self, other);
   div_stub(iter.device_type(), iter);
   return iter.output();
 }
@@ -133,7 +133,7 @@ Tensor mul(const Tensor& self, const Tensor& other) {
 
 Tensor mul(const Tensor& self, const Tensor& other, ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  auto iter = TensorIterator::binary_op(result, self, other);
   mul_stub(iter.device_type(), iter);
   return iter.output();
 }
@@ -165,7 +165,7 @@ Tensor sub(const Tensor& self, const Tensor& other, Scalar alpha) {
 Tensor sub(const Tensor& self, const Tensor& other, Scalar alpha, ScalarType dtype) {
   sub_check(self, other);
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  auto iter = TensorIterator::binary_op(result, self, other);
   sub_stub(iter.device_type(), iter, alpha);
   return iter.output();
 }
