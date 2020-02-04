@@ -35,9 +35,9 @@ namespace native {
 // macro that implements everything, because the former allows some simple preprocessing that are unique to some
 // operators (more is foreseeable) and is more flexible and elegant than the latter.
 template <typename Stub>
-static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub& stub) {
+static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub& stub, bool strategy_promote=false) {
   auto iter = TensorIterator::unary_op(result, self,
-    /*check_mem_overlap=*/true);
+    /*check_mem_overlap=*/true, strategy_promote);
   stub(iter.device_type(), iter);
   return result;
 }
@@ -94,7 +94,7 @@ Tensor& ceil_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(
 Tensor ceil(const Tensor& self) { return unary_op_impl(self, at::ceil_out); }
 Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
-Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub); }
+Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub, true); }
 Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
 Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::expm1_out, dtype); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
