@@ -1227,6 +1227,12 @@
     CPU: expm1_out
     CUDA: expm1_out
 
+- func: expm1.out_promoting(Tensor self, *, Tensor(a!) out, bool promoting=False) -> Tensor(a!)
+  supports_named_tensor: True
+  dispatch:
+    CPU: expm1_out
+    CUDA: expm1_out
+
 - func: expand(Tensor(a) self, int[] size, *, bool implicit=False) -> Tensor(a)
   variants: method  # This is method-only to match the previous tensor API. In the future we could make this a function too.
   device_guard: False
