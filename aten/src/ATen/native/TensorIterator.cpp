@@ -689,7 +689,6 @@ TensorIterator TensorIterator::unary_op(Tensor& out, const Tensor& a,
   iter.add_output(out);
   iter.add_input(a);
   iter.num_outputs_ = 1;
-  std::cout << "Building tensor: " << std::endl;
   iter.build(); // This causes error
   return iter;
 }
@@ -962,7 +961,6 @@ void TensorIterator::build() {
   compute_names();
   // compute the broadcasted shape
   compute_shape();
-  std::cout << "Computing types: " << std::endl;
   // compute the result dtype and device
   compute_types();
   if (can_use_fast_set_up()) {
