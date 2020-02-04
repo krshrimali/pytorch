@@ -65,7 +65,7 @@ Tensor add(const Tensor& self, const Tensor& other, Scalar alpha) {
 // And not use an overload
 Tensor add(const Tensor& self, const Tensor& other, Scalar alpha, ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  auto iter = TensorIterator::binary_op(result, self.to(dtype), other.to(dtype));
+  auto iter = TensorIterator::binary_op(result, self, other);
   add_stub(iter.device_type(), iter, alpha);
   return iter.output();
 }
