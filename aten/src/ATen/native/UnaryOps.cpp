@@ -48,13 +48,13 @@ static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
   Tensor result = at::empty({0}, self.options());
-  return out_impl(result, self);
+  return out_impl(result, self); 
 }
 
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
-  return out_impl(result, self);
+  return out_impl(result, self, true);  // true for dtype conversion
 }
 
 template <typename OutImpl>
@@ -94,7 +94,7 @@ Tensor& ceil_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(
 Tensor ceil(const Tensor& self) { return unary_op_impl(self, at::ceil_out); }
 Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
-Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub, true); }
+Tensor& expm1_out(Tensor& result, const Tensor& self, bool promoting=false) { return unary_op_impl_out(result, self, expm1_stub, promoting); }
 Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
 Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::expm1_out, dtype); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
