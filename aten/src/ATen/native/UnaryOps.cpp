@@ -94,9 +94,10 @@ Tensor& ceil_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(
 Tensor ceil(const Tensor& self) { return unary_op_impl(self, at::ceil_out); }
 Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
-Tensor& expm1_out(Tensor& result, const Tensor& self, bool promoting=false) { return unary_op_impl_out(result, self, expm1_stub, promoting); }
+Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub); }
+Tensor& _expm1_out_promoting(Tensor& result, const Tensor& self, bool promoting) { return unary_op_impl_out(result, self, expm1_stub, promoting); }
 Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
-Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::expm1_out, dtype); }
+Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::_expm1_out_promoting, dtype); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
 Tensor& frac_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, frac_stub); }
