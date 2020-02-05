@@ -52,7 +52,7 @@ inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
 }
 
 template <typename OutImpl>
-inline Tensor unary_op_impl_dtype(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
+inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
   Tensor result = at::empty({0}, self.options().dtype(dtype));
   out_impl(result, self, true);  // true for dtype conversion
   return result;
@@ -98,13 +98,13 @@ Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub); }
 Tensor& expm1_out_promoting(Tensor& result, const Tensor& self, bool promoting=false) { return unary_op_impl_out(result, self, expm1_stub, promoting); }
 Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
-Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl_dtype(self, at::native::expm1_out_promoting, dtype); }
+Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::native::expm1_out_promoting, dtype); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
 Tensor& frac_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, frac_stub); }
 Tensor& frac_out_promoting(Tensor& result, const Tensor& self, bool promoting=false) { return unary_op_impl_out(result, self, frac_stub, promoting); }
 Tensor frac(const Tensor& self) { return unary_op_impl(self, at::frac_out); }
-Tensor frac(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl_dtype(self, at::native::frac_out_promoting, dtype); }
+Tensor frac(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::native::frac_out_promoting, dtype); }
 Tensor& frac_(Tensor& self) { return unary_op_impl_(self, at::frac_out); }
 
 Tensor& floor_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, floor_stub); }
@@ -112,9 +112,9 @@ Tensor floor(const Tensor& self) { return unary_op_impl(self, at::floor_out); }
 Tensor& floor_(Tensor& self) { return unary_op_impl_(self, at::floor_out); }
 
 Tensor& log_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log_stub); }
-Tensor& log_out_promoting(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log_stub, promoting); }
+Tensor& log_out_promoting(Tensor& result, const Tensor& self, bool promoting=false) { return unary_op_impl_out(result, self, log_stub, promoting); }
 Tensor log(const Tensor& self) { return unary_op_impl(self, at::log_out); }
-Tensor log(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl_dtype(self, at::native::log_out_promoting, dtype); }
+Tensor log(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::native::log_out_promoting, dtype); }
 Tensor& log_(Tensor& self) { return unary_op_impl_(self, at::log_out); }
 
 Tensor& log10_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log10_stub); }
