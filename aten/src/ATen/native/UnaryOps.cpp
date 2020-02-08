@@ -46,16 +46,15 @@ static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub
 // otherwise it won't dispatch to out-of-source devices like XLA.
 // For example it must be at::bitwise_not_out instead of bitwise_not_out(which is at::native!).
 template <typename OutImpl>
-inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
-  Tensor result = at::empty({0}, self.options());
-  return out_impl(result, self); 
-}
-
-template <typename OutImpl>
-inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::ScalarType dtype) {
-  Tensor result = at::empty({0}, self.options().dtype(dtype));
-  out_impl(result, self, true);  // true for dtype conversion
-  return result;
+static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, c10::optional<ScalarType> dtype=c10::nullopt) {
+  Tensor result;
+  if (dtype.has_value()) {
+    result = at::empty({0}, self.options().dtype(dtype));
+    return out_impl(result, self, true);
+  } else {
+    result = at::empty({0}, self.options());
+    return out_impl(result, self);
+  }
 }
 
 template <typename OutImpl>
@@ -97,8 +96,13 @@ Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
 Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub); }
 Tensor& expm1_out_promoting(Tensor& result, const Tensor& self, bool promoting=false) { return unary_op_impl_out(result, self, expm1_stub, promoting); }
-Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
-Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::native::expm1_out_promoting, dtype); }
+Tensor expm1(const Tensor& self, c10::optional<ScalarType> dtype) { 
+    if (dtype.has_value())
+        return unary_op_impl(self, at::native::expm1_out_promoting, dtype); 
+    else
+        return unary_op_impl(self, at::expm1_out);
+}
+// Tensor expm1(const Tensor& self, c10::ScalarType dtype) { return unary_op_impl(self, at::native::expm1_out_promoting, dtype); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
 Tensor& frac_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, frac_stub); }
