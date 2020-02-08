@@ -1213,11 +1213,12 @@
   supports_named_tensor: True
   variants: function, method
 
-- func: expm1.dtype(Tensor self, ScalarType dtype) -> Tensor
+- func: expm1.dtype(Tensor self, ScalarType? dtype=None) -> Tensor
+  use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
 
-- func: expm1.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: expm1.out(Tensor self, ScalarType? dtype=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: expm1_out

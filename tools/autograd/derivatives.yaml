@@ -325,7 +325,7 @@
 - name: exp(Tensor self) -> Tensor
   self: grad * result
 
-- name: expm1(Tensor self) -> Tensor
+- name: expm1(Tensor self, ScalarType? dtype=None) -> Tensor
   self: grad * (result + 1)
 
 - name: expand(Tensor(a) self, int[] size, *, bool implicit=False) -> Tensor(a)
