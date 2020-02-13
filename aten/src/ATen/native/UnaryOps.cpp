@@ -31,6 +31,38 @@
 namespace at {
 namespace native {
 
+static inline ScalarType promoteIntToFloats(ScalarType a) {
+  // These promotion rules are for Unary Ops Int to Float conversions
+  // Based on NumPy's conversion rules
+  // For discussion: https://github.com/pytorch/pytorch/issues/28703
+  constexpr auto f4 = ScalarType::Float; // fp32
+  constexpr auto f8 = ScalarType::Double; // fp64
+  constexpr auto ud = ScalarType::Undefined; // Undefined
+
+  // On information about symbols used:
+  // u1 - ScalarType::Byte
+  // i1 - ScalarType::Char
+  // i2 - ScalarType::Short
+  // i4 - ScalarType::Int
+  // i8 - ScalarType::Long
+  // f2 - ScalarType::Half
+  // f4 - ScalarType::Float
+  // f8 - ScalarType::Double
+  // c2 - ScalarType::ComplexHalf
+  // c4 - ScalarType::ComplexFloat
+  // c8 - ScalarType::ComplexDouble
+  // b1 - ScalarType::Bool
+  // bf - ScalarType::BFloat16
+  // ud - ScalarType::Undefined
+
+  static constexpr ScalarType _promoteIntToFloatsLookup[static_cast<int>(ScalarType::NumOptions)] = {
+    /* u1  i1  i2  i4  i8  f2  f4  f8  c2  c4  c8  b1  q1  q2  q3  bf*/
+       ud, f4, f8, f8, f8, ud, ud, ud, ud, ud, ud, ud, ud, ud, ud, ud
+  };
+
+  return _promoteIntToFloatsLookup[static_cast<int>(a)];
+}
+
 // NOTE: These are helper functions that reduce redundant code in implementing the most typical kind of unary operators.
 // YOU ARE NOT OBLIGED TO USE THESE HELPERS---if you're writing something more specialized, please don't try to make
 // them work for your case, but just write something new instead. Here we use helper functions instead of a flat fat
@@ -49,8 +81,22 @@ static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub
 // For example it must be at::bitwise_not_out instead of bitwise_not_out(which is at::native!).
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl) {
-  Tensor result = at::empty({0}, self.options());
-  return out_impl(result, self);
+  c10::ScalarType dtype;
+  
+  if (self.scalar_type() == kChar || self.scalar_type() == kBool) {
+    dtype = (self.device().type() == DeviceType::CPU) ? kFloat : kHalf;  
+  } else {
+    dtype = promoteIntToFloats(self.scalar_type());
+  }
+
+  // dtype is set to Undefined from the lookup table if no int-to-float conversion
+  if (dtype != ScalarType::Undefined) {
+    Tensor result = at::empty({0}, self.options().dtype(dtype));
+    return out_impl(result, self.to(dtype));
+  } else {
+    Tensor result = at::empty({0}, self.options());
+    return out_impl(result, self);
+  }
 }
 
 template <typename OutImpl>
