@@ -224,6 +224,10 @@
   variants: function, method
   supports_named_tensor: True
 
+- func: angle.dtype(Tensor self, *, ScalarType dtype) -> Tensor
+  supports_named_tensor: True
+  variants: function, method
+
 - func: angle.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
 
@@ -247,6 +251,10 @@
   use_c10_dispatcher: full
   variants: function, method
   supports_named_tensor: True
+
+- func: conj.dtype(Tensor self, *, ScalarType dtype) -> Tensor
+  supports_named_tensor: True
+  variants: function, method
 
 - func: conj.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
@@ -663,6 +671,10 @@
 
 - func: ceil(Tensor self) -> Tensor
   use_c10_dispatcher: full
+  supports_named_tensor: True
+  variants: function, method
+
+- func: ceil.dtype(Tensor self, *, ScalarType dtype) -> Tensor
   supports_named_tensor: True
   variants: function, method
 
@@ -1212,6 +1224,10 @@
 
 - func: expm1(Tensor self) -> Tensor
   use_c10_dispatcher: full
+  supports_named_tensor: True
+  variants: function, method
+
+- func: expm1.dtype(Tensor self, *, ScalarType dtype) -> Tensor
   supports_named_tensor: True
   variants: function, method
 
@@ -2302,6 +2318,10 @@
 
 - func: round(Tensor self) -> Tensor
   use_c10_dispatcher: full
+  supports_named_tensor: True
+  variants: function, method
+
+- func: round.dtype(Tensor self, *, ScalarType dtype) -> Tensor
   supports_named_tensor: True
   variants: function, method
 
