@@ -31,7 +31,6 @@
 namespace at {
 namespace native {
 
-// Using anonymous namespace as these functions' scope is limited to this file and we do not want to pollute at::native namespace
 namespace {
   enum class TypePromotionStrategy {
     None,  // No implicit dtype promotion
@@ -41,7 +40,8 @@ namespace {
     Type4  // bool - fp16
   };
 
-  // promoteToFloatType[1/2/3/4] functions are helper functions to support input dtype to Float implicit promotions based on NumPy's conversion rules
+  // promoteToFloatType[1/2/3/4] functions are helper functions to support input dtype to Float implicit promotions 
+  // based on NumPy's conversion rules
   // For discussion, check https://github.com/pytorch/pytorch/pull/33322 and https://github.com/pytorch/pytorch/issues/28703
   // There are 4 type of dtype promotions in NumPy: (float16 is replaced by float32 for CPU devices)
   // Type - 1: int8 - float16, int16 - float32, int32 - float64, int64 - float64, bool - float16
@@ -133,7 +133,8 @@ namespace {
       return dtype;
     }
 
-    // typePromotionStrategy argument defaults to TypePromotionStrategy::None (no implicit dtype upcasting) and is set to TypePromotionStrategy::Type1/Type2/Type3/Type4 depending on the type of implicit dtype promotion
+    // typePromotionStrategy argument defaults to TypePromotionStrategy::None (no implicit dtype upcasting) and 
+    // is set to TypePromotionStrategy::Type1/Type2/Type3/Type4 depending on the type of implicit dtype promotion
     ScalarType promoted_dtype = ScalarType::Undefined;
 
     if (typeStrategy != TypePromotionStrategy::None) {
@@ -183,7 +184,8 @@ static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl,
     TypePromotionStrategy typeStrategy=TypePromotionStrategy::None, c10::ScalarType dtype=ScalarType::Undefined) { 
   // Calculate the dtype for type promotion
   ScalarType promoted_dtype = get_promoted_dtype(self, typeStrategy, dtype);
-  Tensor result = (promoted_dtype == ScalarType::Undefined) ? at::empty({0}, self.options()) : at::empty({0}, self.options().dtype(promoted_dtype));
+  Tensor result = (promoted_dtype == ScalarType::Undefined) ? at::empty({0}, self.options()) : 
+      at::empty({0}, self.options().dtype(promoted_dtype));
   return out_impl(result, self);
 }
 
