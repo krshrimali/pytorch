@@ -123,8 +123,16 @@ namespace {
 
     return dtype;
   }
+  
+  // This function returns the dtype to promote 
+  // typeStrategy is the type of implicit dtype promotion
+  // dtype is the user-input dtype for explicit type promotion (gets priority over implicit type promotion)
+  ScalarType get_promoted_dtype(const Tensor& self, TypePromotionStrategy typeStrategy, c10::ScalarType dtype) { 
+    // Explicit dtype promotion gets priority over implicit dtype promotion
+    if (dtype != ScalarType::Undefined) {
+      return dtype;
+    }
 
-  ScalarType get_promoted_dtype(const Tensor& self, TypePromotionStrategy typeStrategy) {
     // typePromotionStrategy argument defaults to TypePromotionStrategy::None (no implicit dtype upcasting) and is set to TypePromotionStrategy::Type1/Type2/Type3/Type4 depending on the type of implicit dtype promotion
     ScalarType promoted_dtype = ScalarType::Undefined;
 
@@ -172,25 +180,12 @@ static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub
 // For example it must be at::bitwise_not_out instead of bitwise_not_out(which is at::native!).
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, 
-    TypePromotionStrategy typeStrategy=TypePromotionStrategy::None, c10::ScalarType dtype=ScalarType::Undefined) {
-  if (dtype != ScalarType::Undefined) { 
-    // Perform explicit dtype promotion
-    Tensor result = at::empty({0}, self.options().dtype(dtype));
-    return out_impl(result, self);
-  }
-  
+    TypePromotionStrategy typeStrategy=TypePromotionStrategy::None, c10::ScalarType dtype=ScalarType::Undefined) { 
   // Perform implicit dtype promotion
-  // for typeStrategy == TypePromotionStrategy::None, should we pass it to the function or just include an if condition before this? 
-  // Saves some memory and time?
-  ScalarType promoted_dtype = get_promoted_dtype(self, typeStrategy);
-
-  if (promoted_dtype != ScalarType::Undefined) {
-    Tensor result = at::empty({0}, self.options().dtype(promoted_dtype));
-    return out_impl(result, self.to(promoted_dtype));
-  } else {
-    Tensor result = at::empty({0}, self.options());
-    return out_impl(result, self);
-  }
+  ScalarType promoted_dtype = get_promoted_dtype(self, typeStrategy, dtype);
+  
+  Tensor result = (promoted_dtype == ScalarType::Undefined) ? at::empty({0}, self.options()) : at::empty({0}, self.options().dtype(promoted_dtype));
+  return out_impl(result, self);
 }
 
 template <typename OutImpl>
@@ -213,8 +208,7 @@ Tensor& abs_(Tensor& self) { return unary_op_impl_(self, at::abs_out); }
 Tensor& angle_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, angle_stub); }
 Tensor angle(const Tensor& self) { return unary_op_impl(self, at::angle_out, TypePromotionStrategy::Type2); }
 Tensor angle(const Tensor& self, c10::ScalarType dtype) {
-  // Not passing TypePromotionStrategy flag as dtype gets priority over implicit type promotion
-  return unary_op_impl(self, at::angle_out, TypePromotionStrategy::None, dtype=dtype);
+  return unary_op_impl(self, at::angle_out, TypePromotionStrategy::Type2, dtype);
 }
 
 Tensor& real_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, real_stub); }
@@ -226,8 +220,7 @@ Tensor imag(const Tensor& self) { return unary_op_impl(self, at::imag_out); }
 Tensor& conj_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, conj_stub); }
 Tensor conj(const Tensor& self) { return unary_op_impl(self, at::conj_out, TypePromotionStrategy::Type3); }
 Tensor conj(const Tensor& self, c10::ScalarType dtype) {
-  // Not passing TypePromotionStrategy flag as dtype gets priority over implicit type promotion 
-  return unary_op_impl(self, at::conj_out, TypePromotionStrategy::None, dtype=dtype);
+  return unary_op_impl(self, at::conj_out, TypePromotionStrategy::Type3, dtype);
 }
 
 Tensor& bitwise_not_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, bitwise_not_stub); }
@@ -239,16 +232,16 @@ Tensor& ceil_out(Tensor& result, const Tensor& self) {
 }
 Tensor ceil(const Tensor& self) { return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::Type1); }
 Tensor ceil(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::None, dtype=dtype);
+  return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::Type1, dtype);
 }
 Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
 Tensor& expm1_out(Tensor& result, const Tensor& self) {
   return unary_op_impl_out(result, self, expm1_stub); 
 }
-Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out); }
+Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::Type1); }
 Tensor expm1(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::None, dtype=dtype);
+  return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::Type1, dtype);
 }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
@@ -279,8 +272,7 @@ Tensor& log2_(Tensor& self) { return unary_op_impl_(self, at::log2_out); }
 Tensor& round_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, round_stub); }
 Tensor round(const Tensor& self) { return unary_op_impl(self, at::round_out, TypePromotionStrategy::Type4); }
 Tensor round(const Tensor& self, c10::ScalarType dtype) {
-  // Not passing TypePromotionStrategy flag as dtype takes priority over implicit type promotion
-  return unary_op_impl(self, at::round_out, TypePromotionStrategy::None, dtype=dtype);
+  return unary_op_impl(self, at::round_out, TypePromotionStrategy::Type4, dtype);
 }
 Tensor& round_(Tensor& self) { return unary_op_impl_(self, at::round_out); }
 
