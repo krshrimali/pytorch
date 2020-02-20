@@ -181,9 +181,8 @@ static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, 
     TypePromotionStrategy typeStrategy=TypePromotionStrategy::None, c10::ScalarType dtype=ScalarType::Undefined) { 
-  // Perform implicit dtype promotion
+  // Calculate the dtype for type promotion
   ScalarType promoted_dtype = get_promoted_dtype(self, typeStrategy, dtype);
-  
   Tensor result = (promoted_dtype == ScalarType::Undefined) ? at::empty({0}, self.options()) : at::empty({0}, self.options().dtype(promoted_dtype));
   return out_impl(result, self);
 }
