@@ -51,7 +51,6 @@ namespace {
   static inline ScalarType promoteToFloatType1(const Tensor& self) {
     // This promotes dtype based on Type 1 strategy
     ScalarType dtype;
-
     switch(self.scalar_type()) {
       case kChar:
         dtype = (self.device().type() == DeviceType::CPU) ? kFloat : kHalf;
@@ -71,14 +70,12 @@ namespace {
       default:
         dtype = ScalarType::Undefined;
     }
-
     return dtype;
   }
 
   static inline ScalarType promoteToFloatType2(const Tensor& self) {
     // This promotes dtype based on Type 2 strategy
     ScalarType dtype;
-
     switch(self.scalar_type()) {
       case kChar:
       case kShort:
@@ -90,14 +87,12 @@ namespace {
       default:
         dtype = ScalarType::Undefined;
     }
-
     return dtype;
   }
 
   static inline ScalarType promoteToFloatType3(const Tensor& self) {
     // This promotes dtype based on Type 3 strategy
     ScalarType dtype;
-
     switch(self.scalar_type()) {
       case kBool:
         dtype = kChar;
@@ -105,14 +100,12 @@ namespace {
       default:
         dtype = ScalarType::Undefined;
     }
-
     return dtype;
   }
 
   static inline ScalarType promoteToFloatType4(const Tensor& self) {
     // This promotes dtype based on Type 4 strategy
     ScalarType dtype;
-
     switch(self.scalar_type()) {
       case kBool:
         dtype = (self.device().type() == DeviceType::CPU) ? kFloat : kHalf;
@@ -120,7 +113,6 @@ namespace {
       default:
         dtype = ScalarType::Undefined;
     }
-
     return dtype;
   }
   
@@ -132,11 +124,9 @@ namespace {
     if (dtype != ScalarType::Undefined) {
       return dtype;
     }
-
     // typePromotionStrategy argument defaults to TypePromotionStrategy::None (no implicit dtype upcasting) and 
     // is set to TypePromotionStrategy::Type1/Type2/Type3/Type4 depending on the type of implicit dtype promotion
     ScalarType promoted_dtype = ScalarType::Undefined;
-
     if (typeStrategy != TypePromotionStrategy::None) {
       // This enables int-to-float implicit dtype conversions
       switch(typeStrategy) {
@@ -157,7 +147,6 @@ namespace {
           promoted_dtype = ScalarType::Undefined;
       }
     }
-
     return promoted_dtype;    
   }
 
