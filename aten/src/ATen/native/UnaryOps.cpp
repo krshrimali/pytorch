@@ -67,22 +67,6 @@ static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub
 // promote_int_to_float is used to enable support for implicit type promotion in Unary Ops, see PR #33322 for discussion
 template <typename OutImpl>
 static inline Tensor unary_op_impl(const Tensor& self, OutImpl& out_impl, bool promote_int_to_float=true) {
-  /*
-   * Another approach: // too many if-else conditions, not suggested
-   * if (promote_int_to_float) {
-   *   ScalarType promoted_dtype = get_promoted_dtype(self);
-   *   if (promoted_dtype != ScalarType::Undefined) {
-   *     result = at::empty({0}, self.options().dtype(promoted_dtype));
-   *     return out_impl(result, self.to(promoted_dtype));
-   *   } else {
-   *     result = at::empty({0}, self.options());
-   *     return out_impl(result, self);
-   *   }
-   * } else {
-   *   result = at::empty({0}, self.options());
-   *   return out_impl(result, self);
-   * }
-   */
   ScalarType promoted_dtype = promote_int_to_float ? get_promoted_dtype(self) : ScalarType::Undefined;
   if (promoted_dtype != ScalarType::Undefined) {
     Tensor result = at::empty({0}, self.options().dtype(promoted_dtype));
