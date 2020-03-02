@@ -119,7 +119,7 @@ namespace {
         case TypePromotionStrategy::IntBoolToFloats:
           return promoteIntBoolToFloats(self);
         case TypePromotionStrategy::IntBoolToFloat64:
-          returnpromoteIntBoolToFloat64(self);
+          return promoteIntBoolToFloat64(self);
         case TypePromotionStrategy::BoolToInt8:
           return promoteBoolToInt8(self);
         case TypePromotionStrategy::BoolToFloat16:
@@ -177,9 +177,9 @@ Tensor abs(const Tensor& self) { return unary_op_impl(self, at::abs_out); }
 Tensor& abs_(Tensor& self) { return unary_op_impl_(self, at::abs_out); }
 
 Tensor& angle_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, angle_stub); }
-Tensor angle(const Tensor& self) { return unary_op_impl(self, at::angle_out, TypePromotionStrategy::Type2); }
+Tensor angle(const Tensor& self) { return unary_op_impl(self, at::angle_out, TypePromotionStrategy::IntBoolToFloat64); }
 Tensor angle(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::angle_out, TypePromotionStrategy::Type2, dtype);
+  return unary_op_impl(self, at::angle_out, TypePromotionStrategy::IntBoolToFloat64, dtype);
 }
 
 Tensor& real_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, real_stub); }
@@ -189,9 +189,9 @@ Tensor& imag_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(
 Tensor imag(const Tensor& self) { return unary_op_impl(self, at::imag_out); }
 
 Tensor& conj_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, conj_stub); }
-Tensor conj(const Tensor& self) { return unary_op_impl(self, at::conj_out, TypePromotionStrategy::Type3); }
+Tensor conj(const Tensor& self) { return unary_op_impl(self, at::conj_out, TypePromotionStrategy::BoolToInt8); }
 Tensor conj(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::conj_out, TypePromotionStrategy::Type3, dtype);
+  return unary_op_impl(self, at::conj_out, TypePromotionStrategy::BoolToInt8, dtype);
 }
 
 Tensor& bitwise_not_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, bitwise_not_stub); }
@@ -201,18 +201,18 @@ Tensor& bitwise_not_(Tensor& self) { return unary_op_impl_(self, at::bitwise_not
 Tensor& ceil_out(Tensor& result, const Tensor& self) { 
   return unary_op_impl_out(result, self, ceil_stub); 
 }
-Tensor ceil(const Tensor& self) { return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::Type1); }
+Tensor ceil(const Tensor& self) { return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::IntBoolToFloats); }
 Tensor ceil(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::Type1, dtype);
+  return unary_op_impl(self, at::ceil_out, TypePromotionStrategy::IntBoolToFloats, dtype);
 }
 Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
 Tensor& expm1_out(Tensor& result, const Tensor& self) {
   return unary_op_impl_out(result, self, expm1_stub); 
 }
-Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::Type1); }
+Tensor expm1(const Tensor& self) { return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::IntBoolToFloats); }
 Tensor expm1(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::Type1, dtype);
+  return unary_op_impl(self, at::expm1_out, TypePromotionStrategy::IntBoolToFloats, dtype);
 }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
@@ -241,9 +241,9 @@ Tensor log2(const Tensor& self) { return unary_op_impl(self, at::log2_out); }
 Tensor& log2_(Tensor& self) { return unary_op_impl_(self, at::log2_out); }
 
 Tensor& round_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, round_stub); }
-Tensor round(const Tensor& self) { return unary_op_impl(self, at::round_out, TypePromotionStrategy::Type4); }
+Tensor round(const Tensor& self) { return unary_op_impl(self, at::round_out, TypePromotionStrategy::BoolToFloat16); }
 Tensor round(const Tensor& self, c10::ScalarType dtype) {
-  return unary_op_impl(self, at::round_out, TypePromotionStrategy::Type4, dtype);
+  return unary_op_impl(self, at::round_out, TypePromotionStrategy::BoolToFloat16, dtype);
 }
 Tensor& round_(Tensor& self) { return unary_op_impl_(self, at::round_out); }
 
