@@ -452,7 +452,7 @@ Tensor& mvlgamma_(Tensor& self, int64_t p) {
 #define IMPLEMENT_UNARY_FLOATING_OP_VEC_CUDA(op)                       \
   IMPLEMENT_UNARY_FLOATING_OP_CORE(op)                                 \
   IMPLEMENT_UNARY_OP_OUT_INPLACE(op, cpu, CPU)                         \
-  IMPLEMENT_UNARY_OP_OUT_INPLACE(op, cpu, CUDA)
+  IMPLEMENT_UNARY_OP_OUT_INPLACE(op, cuda, CUDA)
 
 IMPLEMENT_UNARY_FLOATING_OP_VEC(atan)
 IMPLEMENT_UNARY_FLOATING_OP_VEC(cos)

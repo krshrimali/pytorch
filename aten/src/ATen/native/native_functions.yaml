@@ -436,7 +436,7 @@
 - func: asin.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
 
-- func: atan(Tensor self) -> Tensor
+- func: atan(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -448,7 +448,7 @@
     CPU: _atan__cpu
     CUDA: _atan__cuda
 
-- func: atan.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: atan.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _atan_out_cpu
@@ -803,7 +803,7 @@
   use_c10_dispatcher: full
   dispatch: {}
 
-- func: cos(Tensor self) -> Tensor
+- func: cos(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -815,13 +815,13 @@
     CPU: _cos__cpu
     CUDA: _cos__cuda
 
-- func: cos.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: cos.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _cos_out_cpu
     CUDA: _cos_out_cuda
 
-- func: cosh(Tensor self) -> Tensor
+- func: cosh(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -833,7 +833,7 @@
     CPU: _cosh__cpu
     CUDA: _cosh__cuda
 
-- func: cosh.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: cosh.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _cosh_out_cpu
@@ -1174,7 +1174,7 @@
     CPU: empty_strided_cpu
     CUDA: empty_strided_cuda
 
-- func: erf(Tensor self) -> Tensor
+- func: erf(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -1186,13 +1186,13 @@
     CPU: _erf__cpu
     CUDA: _erf__cuda
 
-- func: erf.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: erf.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _erf_out_cpu
     CUDA: _erf_out_cuda
 
-- func: erfc(Tensor self) -> Tensor
+- func: erfc(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -1204,13 +1204,13 @@
     CPU: _erfc__cpu
     CUDA: _erfc__cuda
 
-- func: erfc.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: erfc.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _erfc_out_cpu
     CUDA: _erfc_out_cuda
 
-- func: exp(Tensor self) -> Tensor
+- func: exp(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -1222,7 +1222,7 @@
     CPU: _exp__cpu
     CUDA: _exp__cuda
 
-- func: exp.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: exp.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _exp_out_cpu
@@ -2710,7 +2710,7 @@
   device_guard: False
   variants: method
 
-- func: tan(Tensor self) -> Tensor
+- func: tan(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -2722,13 +2722,13 @@
     CPU: _tan__cpu
     CUDA: _tan__cuda
 
-- func: tan.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: tan.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _tan_out_cpu
     CUDA: _tan_out_cuda
 
-- func: tanh(Tensor self) -> Tensor
+- func: tanh(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: function, method
@@ -2744,7 +2744,7 @@
     CPU: _tanh__cpu
     CUDA: _tanh__cuda
 
-- func: tanh.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: tanh.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _tanh_out_cpu
@@ -4852,13 +4852,13 @@
     CPU: legacy::cpu::_th_multinomial_alias_draw
     CUDA: legacy::cuda::_th_multinomial_alias_draw
 
-- func: lgamma.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: lgamma.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _lgamma_out_cpu
     CUDA: _lgamma_out_cuda
 
-- func: lgamma(Tensor self) -> Tensor
+- func: lgamma(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: method, function
@@ -4882,7 +4882,7 @@
   supports_named_tensor: True
   variants: method, function
 
-- func: erfinv(Tensor self) -> Tensor
+- func: erfinv(Tensor self, bool? promote=None) -> Tensor
   use_c10_dispatcher: full
   supports_named_tensor: True
   variants: method, function
@@ -4897,7 +4897,7 @@
     CPU: _erfinv__cpu
     CUDA: _erfinv__cuda
 
-- func: erfinv.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
+- func: erfinv.out(Tensor self, bool? promote=None, *, Tensor(a!) out) -> Tensor(a!)
   supports_named_tensor: True
   dispatch:
     CPU: _erfinv_out_cpu
