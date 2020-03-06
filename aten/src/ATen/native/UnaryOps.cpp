@@ -37,9 +37,9 @@ namespace native {
 // macro that implements everything, because the former allows some simple preprocessing that are unique to some
 // operators (more is foreseeable) and is more flexible and elegant than the latter.
 template <typename Stub>
-static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub& stub) {
+static inline Tensor& unary_op_impl_out(Tensor& result, const Tensor& self, Stub& stub, bool promote=true) {
   auto iter = TensorIterator::unary_op(result, self,
-    /*check_mem_overlap=*/ true);
+    /*check_mem_overlap=*/true, /*promote=*/promote);
   stub(iter.device_type(), iter);
   return result;
 }
@@ -70,114 +70,193 @@ static inline Tensor& unary_op_impl_(Tensor& self, OutImpl& out_impl) {
   return out_impl(self, self);
 }
 
-Tensor& acos_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, acos_stub); }
+Tensor& acos_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, acos_stub, bool(promote)); 
+  else return unary_op_impl_out(result, self, acos_stub);
+}
 Tensor acos(const Tensor& self) { return unary_float_op_impl(self, at::acos_out); }
 Tensor& acos_(Tensor& self) { return unary_op_impl_(self, at::acos_out); }
 
-Tensor& asin_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, asin_stub); }
+Tensor& asin_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, asin_stub, bool(promote));
+  else return unary_op_impl_out(result, self, asin_stub);
+}
 Tensor asin(const Tensor& self) { return unary_float_op_impl(self, at::asin_out); }
 Tensor& asin_(Tensor& self) { return unary_op_impl_(self, at::asin_out); }
 
-Tensor& abs_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, abs_stub); }
+Tensor& abs_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, abs_stub, bool(promote));
+  else return unary_op_impl_out(result, self, abs_stub);
+}
 Tensor abs(const Tensor& self) { return unary_op_impl(self, at::abs_out); }
 Tensor& abs_(Tensor& self) { return unary_op_impl_(self, at::abs_out); }
 
-Tensor& angle_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, angle_stub); }
+Tensor& angle_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, angle_stub, bool(promote));
+  else return unary_op_impl_out(result, self, angle_stub);
+}
 Tensor angle(const Tensor& self) { return unary_op_impl(self, at::angle_out); }
 
-Tensor& real_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, real_stub); }
+Tensor& real_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, real_stub, bool(promote));
+  else return unary_op_impl_out(result, self, real_stub);
+}
 Tensor real(const Tensor& self) { return unary_op_impl(self, at::real_out); }
 
-Tensor& imag_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, imag_stub); }
+Tensor& imag_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, imag_stub, bool(promote));
+  else return unary_op_impl_out(result, self, imag_stub);
+}
 Tensor imag(const Tensor& self) { return unary_op_impl(self, at::imag_out); }
 
-Tensor& conj_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, conj_stub); }
+Tensor& conj_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, conj_stub, bool(promote));
+  else return unary_op_impl_out(result, self, conj_stub);
+}
 Tensor conj(const Tensor& self) { return unary_op_impl(self, at::conj_out); }
 
-Tensor& bitwise_not_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, bitwise_not_stub); }
+Tensor& bitwise_not_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, bitwise_not_stub, bool(promote));
+  else return unary_op_impl_out(result, self, bitwise_not_stub);
+}
 Tensor bitwise_not(const Tensor& self) { return unary_op_impl(self, at::bitwise_not_out); }
 Tensor& bitwise_not_(Tensor& self) { return unary_op_impl_(self, at::bitwise_not_out); }
 
-Tensor& ceil_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, ceil_stub); }
+Tensor& ceil_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, ceil_stub, bool(promote));
+  else return unary_op_impl_out(result, self, ceil_stub);
+}
 Tensor ceil(const Tensor& self) { return unary_float_op_impl(self, at::ceil_out); }
 Tensor& ceil_(Tensor& self) { return unary_op_impl_(self, at::ceil_out); }
 
-Tensor& expm1_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, expm1_stub); }
+Tensor& expm1_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, expm1_stub, bool(promote));
+  else return unary_op_impl_out(result, self, expm1_stub);
+}
 Tensor expm1(const Tensor& self) { return unary_float_op_impl(self, at::expm1_out); }
 Tensor& expm1_(Tensor& self) { return unary_op_impl_(self, at::expm1_out); }
 
-Tensor& frac_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, frac_stub); }
+Tensor& frac_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, frac_stub, bool(promote));
+  else return unary_op_impl_out(result, self, frac_stub);
+}
 Tensor frac(const Tensor& self) { return unary_op_impl(self, at::frac_out); }
 Tensor& frac_(Tensor& self) { return unary_op_impl_(self, at::frac_out); }
 
-Tensor& floor_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, floor_stub); }
+Tensor& floor_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) { 
+  if(promote) return unary_op_impl_out(result, self, floor_stub, bool(promote));
+  else return unary_op_impl_out(result, self, floor_stub);
+}
 Tensor floor(const Tensor& self) { return unary_float_op_impl(self, at::floor_out); }
 Tensor& floor_(Tensor& self) { return unary_op_impl_(self, at::floor_out); }
 
-Tensor& log_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log_stub); }
+Tensor& log_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, log_stub, bool(promote));
+  else return unary_op_impl_out(result, self, log_stub);
+}
 Tensor log(const Tensor& self) { return unary_float_op_impl(self, at::log_out); }
 Tensor& log_(Tensor& self) { return unary_op_impl_(self, at::log_out); }
 
-Tensor& log10_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log10_stub); }
+Tensor& log10_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, log10_stub, bool(promote));
+  else return unary_op_impl_out(result, self, log10_stub);
+}
 Tensor log10(const Tensor& self) { return unary_float_op_impl(self, at::log10_out); }
 Tensor& log10_(Tensor& self) { return unary_op_impl_(self, at::log10_out); }
 
-Tensor& log1p_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log1p_stub); }
+Tensor& log1p_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, log1p_stub, bool(promote));
+  else return unary_op_impl_out(result, self, log1p_stub);
+}
 Tensor log1p(const Tensor& self) { return unary_float_op_impl(self, at::log1p_out); }
 Tensor& log1p_(Tensor& self) { return unary_op_impl_(self, at::log1p_out); }
 
-Tensor& log2_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, log2_stub); }
+Tensor& log2_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, log2_stub, bool(promote));
+  else return unary_op_impl_out(result, self, log2_stub);
+}
 Tensor log2(const Tensor& self) { return unary_float_op_impl(self, at::log2_out); }
 Tensor& log2_(Tensor& self) { return unary_op_impl_(self, at::log2_out); }
 
-Tensor& round_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, round_stub); }
+Tensor& round_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, round_stub, bool(promote));
+  else return unary_op_impl_out(result, self, round_stub);
+}
 Tensor round(const Tensor& self) { return unary_op_impl(self, at::round_out); }
 Tensor& round_(Tensor& self) { return unary_op_impl_(self, at::round_out); }
 
-Tensor& digamma_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, digamma_stub); }
-Tensor digamma(const Tensor& self) { return unary_op_impl(self, digamma_out); }
-Tensor& digamma_(Tensor& self) { return unary_op_impl_(self, digamma_out); }
+Tensor& digamma_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, digamma_stub, bool(promote));
+  else return unary_op_impl_out(result, self, digamma_stub);
+}
+Tensor digamma(const Tensor& self) { return unary_op_impl(self, at::digamma_out); }
+Tensor& digamma_(Tensor& self) { return unary_op_impl_(self, at::digamma_out); }
 
-Tensor& reciprocal_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, reciprocal_stub); }
+Tensor& reciprocal_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, reciprocal_stub, bool(promote));
+  else return unary_op_impl_out(result, self, reciprocal_stub);
+}
 Tensor reciprocal(const Tensor& self) { return unary_op_impl(self, at::reciprocal_out); }
 Tensor& reciprocal_(Tensor& self) { return unary_op_impl_(self, at::reciprocal_out); }
 
-Tensor& rsqrt_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, rsqrt_stub); }
+Tensor& rsqrt_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, rsqrt_stub, bool(promote));
+  else return unary_op_impl_out(result, self, rsqrt_stub);
+}
 Tensor rsqrt(const Tensor& self) { return unary_op_impl(self, at::rsqrt_out); }
 Tensor& rsqrt_(Tensor& self) { return unary_op_impl_(self, at::rsqrt_out); }
 
-Tensor& sign_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sign_stub); }
+Tensor& sign_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, sign_stub, bool(promote));
+  else return unary_op_impl_out(result, self, sign_stub);
+}
 Tensor sign(const Tensor& self) { return unary_op_impl(self, at::sign_out); }
 Tensor& sign_(Tensor& self) { return unary_op_impl_(self, at::sign_out); }
 
-Tensor& sin_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sin_stub); }
+Tensor& sin_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, sin_stub, bool(promote));
+  else return unary_op_impl_out(result, self, sin_stub);
+}
 Tensor sin(const Tensor& self) { return unary_float_op_impl(self, at::sin_out); }
 Tensor& sin_(Tensor& self) { return unary_op_impl_(self, at::sin_out); }
 
-Tensor& sinh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sinh_stub); }
+Tensor& sinh_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, sinh_stub, bool(promote));
+  else return unary_op_impl_out(result, self, sinh_stub);
+}
 Tensor sinh(const Tensor& self) { return unary_float_op_impl(self, at::sinh_out); }
 Tensor& sinh_(Tensor& self) { return unary_op_impl_(self, at::sinh_out); }
 
-Tensor& sqrt_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sqrt_stub); }
+Tensor& sqrt_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, sqrt_stub, bool(promote));
+  else return unary_op_impl_out(result, self, sqrt_stub);
+}
 Tensor sqrt(const Tensor& self) { return unary_float_op_impl(self, at::sqrt_out); }
 Tensor& sqrt_(Tensor& self) { return unary_op_impl_(self, at::sqrt_out); }
 
 Tensor square(const Tensor& self) { return at::pow(self, 2); }
 Tensor& square_(Tensor& self) { return at::pow_out(self, self, 2); }
 
-Tensor& sigmoid_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sigmoid_stub);  }
+Tensor& sigmoid_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, sigmoid_stub, bool(promote));
+  else return unary_op_impl_out(result, self, sigmoid_stub);
+}
 Tensor sigmoid(const Tensor& self) { return unary_op_impl(self, at::sigmoid_out);  }
 Tensor& sigmoid_(Tensor& self) { return unary_op_impl_(self, at::sigmoid_out);  }
 
-Tensor& trunc_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, trunc_stub); }
+Tensor& trunc_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
+  if(promote) return unary_op_impl_out(result, self, trunc_stub, bool(promote));
+  else return unary_op_impl_out(result, self, trunc_stub);
+}
 Tensor trunc(const Tensor& self) { return unary_float_op_impl(self, at::trunc_out); }
 Tensor& trunc_(Tensor& self) { return unary_op_impl_(self, at::trunc_out); }
 
-Tensor& neg_out(Tensor& result, const Tensor& self) {
+Tensor& neg_out(Tensor& result, const Tensor& self, c10::optional<bool> promote) {
   TORCH_CHECK(self.scalar_type() != kBool,
               "Negation, the `-` operator, on a bool tensor is not supported. "
               "If you are trying to invert a mask, use the `~` or `logical_not()` operator instead.");
-  return unary_op_impl_out(result, self, neg_stub);
+  if(promote) return unary_op_impl_out(result, self, neg_stub, bool(promote));
+  else return unary_op_impl_out(result, self, neg_stub);
 }
 Tensor neg(const Tensor& self) { return unary_op_impl(self, at::neg_out); }
 Tensor& neg_(Tensor& self) { return unary_op_impl_(self, at::neg_out); }
@@ -327,25 +406,32 @@ Tensor& mvlgamma_(Tensor& self, int64_t p) {
 // produce non-integral values. For the other ops which do not need this type promotion,
 // implementers should continue to use the other macros like IMPLEMENT_UNARY_OP_CORE
 #define IMPLEMENT_UNARY_FLOATING_OP_CORE(op)                           \
-  Tensor op(const Tensor& self) {                                      \
+  Tensor op(const Tensor& self, c10::optional<bool>promote) {                                      \
     Tensor result = isIntegralType(self.scalar_type(), /*include_bool=*/ true) ? \
       at::empty({0}, self.options().dtype(typeMetaToScalarType(c10::get_default_dtype()))) : \
       at::empty({0}, self.options()); \
-    at::op##_out(result, self.to(result.scalar_type()));               \
+    if(promote) at::op##_out(result, self.to(result.scalar_type()), promote); \
+    return at::op##_out(result, self.to(result.scalar_type()));               \
     return result;                                                     \
   }
 
 #define IMPLEMENT_UNARY_OP_OUT_INPLACE(op, prefix, device)             \
-  Tensor& _##op##__##prefix(Tensor& self) {                            \
-    return at::op##_out(self, self);                                   \
+  Tensor& _##op##__##prefix(Tensor& self, c10::optional<bool>promote) {                            \
+    if(promote) return at::op##_out(self, self, promote); \
+    else return at::op##_out(self, self);                                   \
   }                                                                    \
-  Tensor& _##op##_out_##prefix(Tensor& result, const Tensor& self) {   \
+  Tensor& _##op##_out_##prefix(Tensor& result, const Tensor& self, c10::optional<bool> promote) {   \
     checkDeviceType(#op, result, DeviceType::device);                  \
     checkLayout(#op, result, Layout::Strided);                         \
-    auto iter = TensorIterator::unary_op(result, self,                 \
-      /*check_mem_overlap=*/true);                                     \
-    op##_stub(iter.device_type(), iter);                               \
-    return result;                                                     \
+    if(promote) { \
+      auto iter = TensorIterator::unary_op(result, self, true, bool(promote)); \
+      op##_stub(iter.device_type(), iter); \
+      return result; \
+    } else { \
+      auto iter = TensorIterator::unary_op(result, self); \
+      op##_stub(iter.device_type(), iter); \
+      return result; \
+    } \
   }
 
 #define IMPLEMENT_UNARY_OP_VEC(op)                                     \
@@ -371,13 +457,13 @@ Tensor& mvlgamma_(Tensor& self, int64_t p) {
 IMPLEMENT_UNARY_FLOATING_OP_VEC(atan)
 IMPLEMENT_UNARY_FLOATING_OP_VEC(cos)
 IMPLEMENT_UNARY_FLOATING_OP_VEC(cosh)
-IMPLEMENT_UNARY_OP_VEC(erf)
-IMPLEMENT_UNARY_OP_VEC(erfc)
-IMPLEMENT_UNARY_OP_VEC_CUDA(erfinv)
+IMPLEMENT_UNARY_FLOATING_OP_VEC(erf)
+IMPLEMENT_UNARY_FLOATING_OP_VEC(erfc)
+IMPLEMENT_UNARY_FLOATING_OP_VEC_CUDA(erfinv)
 IMPLEMENT_UNARY_FLOATING_OP_VEC(exp)
 IMPLEMENT_UNARY_FLOATING_OP_VEC(tan)
 IMPLEMENT_UNARY_FLOATING_OP_VEC(tanh)
-IMPLEMENT_UNARY_OP_VEC_CUDA(lgamma)
+IMPLEMENT_UNARY_FLOATING_OP_VEC_CUDA(lgamma)
 
 DEFINE_DISPATCH(abs_stub);
 DEFINE_DISPATCH(angle_stub);
