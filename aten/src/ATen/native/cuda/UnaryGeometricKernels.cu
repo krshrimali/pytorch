@@ -168,7 +168,7 @@ void tanh_kernel_cuda(TensorIterator& iter) {
 
 template<typename scalar_t>
 __host__ __device__ static inline scalar_t arcosh_wrapper(scalar_t v) {
-  return ::arcosh(v);
+  return ::acosh(v);
 }
 
 void arcosh_kernel_cuda(TensorIterator& iter) {
@@ -202,6 +202,7 @@ REGISTER_DISPATCH(cos_stub, &cos_kernel_cuda);
 REGISTER_DISPATCH(sinh_stub, &sinh_kernel_cuda);
 REGISTER_DISPATCH(cosh_stub, &cosh_kernel_cuda);
 REGISTER_DISPATCH(tanh_stub, &tanh_kernel_cuda);
+REGISTER_DISPATCH(arcosh_stub, &arcosh_kernel_cuda);
 REGISTER_DISPATCH(tan_stub, &tan_kernel_cuda);
 
 }} // namespace at::native

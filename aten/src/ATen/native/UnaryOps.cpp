@@ -241,7 +241,7 @@ Tensor& sinh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(
 Tensor sinh(const Tensor& self) { return unary_op_impl(self, at::sinh_out); }
 Tensor& sinh_(Tensor& self) { return unary_op_impl_(self, at::sinh_out); }
 
-Tensor& arcosh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sinh_stub); }
+Tensor& arcosh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, arcosh_stub); }
 Tensor arcosh(const Tensor& self) { return unary_op_impl(self, at::arcosh_out); }
 Tensor& arcosh_(Tensor& self) { return unary_op_impl_(self, at::arcosh_out); }
 
@@ -453,6 +453,7 @@ DEFINE_DISPATCH(real_stub);
 DEFINE_DISPATCH(imag_stub);
 DEFINE_DISPATCH(conj_stub);
 DEFINE_DISPATCH(acos_stub);
+DEFINE_DISPATCH(arcosh_stub);
 DEFINE_DISPATCH(asin_stub);
 DEFINE_DISPATCH(atan_stub);
 DEFINE_DISPATCH(bitwise_not_stub);
