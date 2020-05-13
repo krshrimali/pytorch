@@ -165,6 +165,22 @@ void tanh_kernel_cuda(TensorIterator& iter) {
   });
 }
 
+
+template<typename scalar_t>
+__host__ __device__ static inline scalar_t arcosh_wrapper(scalar_t v) {
+  return ::arcosh(v);
+}
+
+void arcosh_kernel_cuda(TensorIterator& iter) {
+  AT_DISPATCH_FLOATING_TYPES_AND2(ScalarType::Half, ScalarType::BFloat16, iter.dtype(), "arcosh_cuda", [&]() {
+    AT_SKIP_BFLOAT16_IF_NOT_ROCM(scalar_t, "arcosh_cuda", [&] {
+      gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
+        return arcosh_wrapper(a);
+      });
+    });
+  });
+}
+
 template<typename scalar_t>
 __host__ __device__ static inline scalar_t tan_wrapper(scalar_t v) {
   return ::tan(v);

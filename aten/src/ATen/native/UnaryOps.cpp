@@ -241,6 +241,10 @@ Tensor& sinh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(
 Tensor sinh(const Tensor& self) { return unary_op_impl(self, at::sinh_out); }
 Tensor& sinh_(Tensor& self) { return unary_op_impl_(self, at::sinh_out); }
 
+Tensor& arcosh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sinh_stub); }
+Tensor arcosh(const Tensor& self) { return unary_op_impl(self, at::arcosh_out); }
+Tensor& arcosh_(Tensor& self) { return unary_op_impl_(self, at::arcosh_out); }
+
 Tensor& cosh_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, cosh_stub); }
 Tensor cosh(const Tensor& self) { return unary_op_impl(self, at::cosh_out); }
 Tensor& cosh_(Tensor& self) { return unary_op_impl_(self, at::cosh_out); }
