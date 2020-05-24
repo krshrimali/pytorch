@@ -124,6 +124,7 @@ static void nanmean_kernel_impl(TensorIterator& iter, const Tensor& size_without
   AT_DISPATCH_ALL_TYPES_AND_C10_COMPLEX(iter.dtype(), "nanmean_cpu", [&] {
     at::Tensor src = iter.tensor(1);
     scalar_t factor = scalar_t(iter.num_output_elements()) / size_without_nans.item<scalar_t>();
+    std::cout << "Factor: " << factor << std::endl;
     binary_kernel_reduce(
       iter,
       NanMeanOps<scalar_t, scalar_t> {factor},
